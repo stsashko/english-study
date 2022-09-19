@@ -8,6 +8,7 @@ services:
     restart: always
     working_dir: /app
     volumes:
+      - ./server/public/:/app/public/
       - ./.env:/app/.env
       - /app/node_modules
     networks:

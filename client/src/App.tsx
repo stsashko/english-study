@@ -8,9 +8,10 @@ import {DashboardPage, LoginPage, RegisterPage, ProfilePage, WordsPage, Sentence
 import {ApolloClient, ApolloLink, ApolloProvider, from, HttpLink, InMemoryCache} from "@apollo/client";
 import {createUploadLink} from 'apollo-upload-client';
 import Cookies from "js-cookie";
+import PATH_API from './helper/pathAPI';
 
 const App: FC = () => {
-    const httpLink = new HttpLink({uri: `http://${process.env.REACT_APP_HOST_FOR_MOBILE || process.env.REACT_APP_HOST_SERVER}:${process.env.REACT_APP_NODE_SERVER_PORT}/`});
+    const httpLink = new HttpLink({uri: `${PATH_API}/`});
 
     const authToken = Cookies.get("auth-token");
 
@@ -28,7 +29,7 @@ const App: FC = () => {
     });
 
     const uploadLink = createUploadLink({
-        uri: `http://${process.env.REACT_APP_HOST_FOR_MOBILE || process.env.REACT_APP_HOST_SERVER}:${process.env.REACT_APP_NODE_SERVER_PORT}`,
+        uri: PATH_API,
         headers: {
             "keep-alive": "true",
             'Authorization': authToken ? `Bearer ${authToken}` : ''

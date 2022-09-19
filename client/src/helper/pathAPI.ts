@@ -1,0 +1,2 @@
+const isDev = process.env.REACT_APP_DEBUG === 'true';
+export default `${isDev ? 'http' : 'https'}://${!isDev ? process.env.REACT_APP_HOST_SERVER : (process.env.REACT_APP_HOST_FOR_MOBILE || 'localhost')}${isDev ? (':' + process.env.REACT_APP_NODE_SERVER_PORT) : ''}`;

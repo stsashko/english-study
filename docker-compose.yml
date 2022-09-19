@@ -1,22 +1,5 @@
 version: '3'
 services:
-#  node-client:
-#    build:
-#      context: .
-#      dockerfile: ./docker/development/node-client/Dockerfile
-#    container_name: english_study_node_client
-#    working_dir: /app
-#    volumes:
-#      - ./.env:/app/.env
-#      - /app/node_modules
-#    networks:
-#      - english_study_network
-#    tty: true
-#    ports:
-#      - ${NODE_CLIENT_PORT}:${NODE_CLIENT_PORT}
-#    stdin_open: true
-#    environment:
-#      TZ: ${TZ}
   node-server:
     build:
       context: .
@@ -26,6 +9,7 @@ services:
     working_dir: /app
     volumes:
 #      - ./server/:/app
+      - ./server/public/:/app/public/
       - ./.env:/app/.env
       - /app/node_modules
     networks:
