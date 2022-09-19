@@ -69,7 +69,7 @@ services:
       - MYSQL_HOST=english_study_mysql
       - MYSQL_USER=${DB_MYSQL_USERNAME}
       - MYSQL_PASS=${DB_MYSQL_PASSWORD}
-      - MAX_BACKUPS=15
+      - MAX_BACKUPS=7
       - INIT_BACKUP=1
       - TZ=${TZ}
       - CRON_TIME=0 3 * * *
