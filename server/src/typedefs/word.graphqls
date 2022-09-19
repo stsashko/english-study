@@ -1,0 +1,67 @@
+
+input wordInput {
+    name: String! @constraint(minLength: 2)
+    translation: String! @constraint(minLength: 2)
+    transcription: String! @constraint(minLength: 2)
+    sentenceId: Int
+    sentenceText: String! @constraint(minLength: 2)
+    sentenceTranslation: String! @constraint(minLength: 2)
+}
+
+input filterWordInput {
+    name: String
+    translation: String
+    transcription: String @constraint(minLength:1)
+    rating: Int @constraint(min: 0)
+    lastShow: String @constraint(minLength: 1)
+    numberShow: Int @constraint(min: 1)
+    numberSuccesses: Int @constraint(min: 1)
+    numberFailures: Int @constraint(min: 1)
+    date:String @constraint(minLength: 1)
+}
+
+input orderWordInput {
+    id: Sort
+    name: Sort
+    translation: Sort
+    transcription: Sort
+    rating: Sort
+    lastShow: Sort
+    numberShow: Sort
+    numberSuccesses: Sort
+    numberFailures: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation {
+    addWord(input: wordInput): Word
+    updWord(id: Int! @constraint(min: 1), input: wordInput): Word
+    delWord(id: Int! @constraint(min: 1)): Word
+}
+
+extend type Query {
+    words(filter: filterWordInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderWordInput): Words!
+    getWord(id: Int! @constraint(min: 1)): Word!
+}
+
+type Words {
+    data: [Word!]
+    count: Int!
+}
+
+type Word {
+    id: ID!
+    name: String!
+    translation: String!
+    transcription: String!
+    rating: Int!
+    lastShow: Date!
+    numberShow: Int!
+    numberSuccesses: Int!
+    numberFailures: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    user: User
+    bySentence: [Sentence]
+}

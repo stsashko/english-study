@@ -1,0 +1,10 @@
+
+interface Timestamps {
+    createdAt: Date!
+    updatedAt: Date!
+}
+
+enum Sort {
+    asc
+    desc
+}

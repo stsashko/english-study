@@ -1,0 +1,20 @@
+
+extend type Query {
+    statisticWord(date: String @constraint(minLength: 1)): [Statistic]
+    statisticSentence(date: String @constraint(minLength: 1)): [Statistic]
+    statisticQuestion(date: String @constraint(minLength: 1)): [StatisticQuestion]
+}
+
+type Statistic {
+    name: String
+    success: Int
+    fail: Int
+}
+
+type StatisticQuestion {
+    name: String
+    GB_word: Int
+    UA_word: Int
+    GB_sentence: Int
+    UA_sentence: Int
+}

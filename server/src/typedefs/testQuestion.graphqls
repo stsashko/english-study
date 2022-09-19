@@ -1,0 +1,142 @@
+
+input testQuestionInput {
+    sentenceId: Int! @constraint(min: 1)
+    rating: Int @constraint(min: 0)
+    completed: Int @constraint(min: 0)
+    testId: Int! @constraint(min: 1)
+    wordId: Int! @constraint(min: 1)
+}
+
+input filterTestQuestionInput {
+    wordId: Int @constraint(min: 1)
+    sentenceId: Int @constraint(min: 1)
+    rating: Int @constraint(min: 0)
+    completed: Int @constraint(min: 0)
+    testId: Int @constraint(min: 1)
+}
+
+input orderTestQuestionInput {
+    id: Sort
+    wordId: Sort
+    sentenceId: Sort
+    rating: Sort
+    completed: Sort
+    testId: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation{
+    addTestQuestion(input: testQuestionInput): TestQuestion
+    updTestQuestion(id: Int! @constraint(min: 1), input: testQuestionInput): TestQuestion
+    delTestQuestion(id: Int! @constraint(min: 1)): TestQuestion
+    sendAnswerWithQuestionWord(input: AnswerInputWord): AnswerWord
+    sendAnswerWithQuestionSentence(input: AnswerInputSentence): AnswerSentence
+}
+
+extend type Query {
+    testQuestions(filter: filterTestQuestionInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderTestQuestionInput): TestQuestions!
+    getTestQuestion(id: Int! @constraint(min: 1)): TestQuestion!
+    getRandomQuestionWord(testId: Int @constraint(min: 1), lang: Lang):RandomQuestionWord!
+    getRandomQuestionSentence(testId: Int @constraint(min: 1), lang: Lang):RandomQuestionSentence!
+}
+
+enum Lang {
+    gb
+    ua
+}
+
+input AnswerInputWord {
+    testId: Int! @constraint(min: 1)
+    questionId: Int! @constraint(min: 1)
+    wordId: Int! @constraint(min: 1)
+    lang: Lang!
+}
+
+input AnswerInputSentence {
+    testId: Int! @constraint(min: 1)
+    questionId: Int! @constraint(min: 1)
+    rating: Int! @constraint(min: 0, max:1)
+}
+
+type AnswerWord {
+    questionId: Int!
+    rating: Boolean!
+    totalQuestions: Int!
+    totalSuccesses: Int!
+    totalFailures: Int!
+    totalResponses: Int!
+    success: Boolean!
+    currentQuestions: [CurrentQuestions!]
+    pagination: [Pagination!]
+}
+
+type AnswerSentence {
+    questionId: Int!
+    rating: Boolean!
+    totalQuestions: Int!
+    totalSuccesses: Int!
+    totalFailures: Int!
+    totalResponses: Int!
+    success: Boolean!
+    pagination: [Pagination!]
+}
+
+type RandomQuestionWord {
+    questionId: ID
+    word: String
+    transcription: String
+    currentQuestions: [CurrentQuestions]
+    totalQuestions: Int!
+    totalSuccesses: Int!
+    totalFailures: Int!
+    totalResponses: Int!
+    pagination: [Pagination]
+    testIsOver: Boolean!
+}
+
+
+type CurrentQuestions {
+    wordId: Int!
+    wordName: String!
+    wordTranscription: String
+    completed: Boolean
+    answer: Boolean
+    customerAnswer: Boolean
+}
+
+type Pagination {
+    number: Int!
+    current: Boolean!
+    completed: Boolean!
+    success: Boolean!
+}
+
+type RandomQuestionSentence {
+    questionId: ID
+    sentence: String
+    answer: String
+    totalQuestions: Int!
+    totalSuccesses: Int!
+    totalFailures: Int!
+    totalResponses: Int!
+    testIsOver: Boolean!
+    pagination: [Pagination]
+}
+
+type TestQuestions {
+    data: [TestQuestion!]
+    count: Int!
+}
+
+type TestQuestion {
+    id: ID!
+    wordId: Int!
+    sentenceId: Int!
+    rating: Int!
+    testId: Int!
+    completed: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    test: Test
+}

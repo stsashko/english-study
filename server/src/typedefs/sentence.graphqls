@@ -1,0 +1,56 @@
+
+input sentenceInput {
+    text: String! @constraint(minLength: 2)
+    translation: String! @constraint(minLength: 2)
+}
+
+input filterSentenceInput {
+    text: String
+    translation: String
+    wordId: Int
+    date:String @constraint(minLength: 1)
+    searchWord: String
+    rating: Int @constraint(min: 0)
+    numberShow: Int @constraint(min: 1)
+    numberSuccesses: Int @constraint(min: 1)
+    numberFailures: Int @constraint(min: 1)
+}
+
+input orderSentenceInput {
+    id: Sort
+    rating: Sort
+    numberShow: Sort
+    numberSuccesses: Sort
+    numberFailures: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation{
+    updSentence(id: Int! @constraint(min: 1), input: sentenceInput): Sentence
+    delSentence(id: Int! @constraint(min: 1)): Sentence
+}
+
+extend type Query {
+    sentences(filter: filterSentenceInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderSentenceInput): Sentences!
+    getSentence(id: Int! @constraint(min: 1)): Sentence!
+}
+
+type Sentences {
+    data: [Sentence!]
+    count: Int!
+}
+
+type Sentence {
+    id: ID!
+    text: String!
+    translation: String!
+    rating: Int!
+    numberShow: Int!
+    numberSuccesses: Int!
+    numberFailures: Int!
+    word: Word
+    wordId: Int!
+    createdAt: Date!
+    updatedAt: Date!
+}

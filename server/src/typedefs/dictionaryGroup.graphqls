@@ -1,0 +1,40 @@
+
+input dictionaryGroupInput {
+    name: String! @constraint(minLength: 3)
+}
+
+input filterDictionaryGroupInput {
+    name: String
+    date:String @constraint(minLength: 1)
+}
+
+input orderDictionaryGroupInput {
+    id: Sort
+    name: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation{
+    addDictionaryGroup(input: dictionaryGroupInput): DictionaryGroup
+    updDictionaryGroup(id: Int! @constraint(min: 1), input: dictionaryGroupInput): DictionaryGroup
+    delDictionaryGroup(id: Int! @constraint(min: 1)): DictionaryGroup
+}
+
+extend type Query {
+    dictionaryGroups(filter: filterDictionaryGroupInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderDictionaryGroupInput): DictionaryGroups!
+    getDictionaryGroup(id: Int! @constraint(min: 1)): DictionaryGroup!
+}
+
+type DictionaryGroups {
+    data: [DictionaryGroup!]
+    count: Int!
+}
+
+type DictionaryGroup {
+    id: ID!
+    name: String!
+    _count: JSONObject
+    createdAt: Date!
+    updatedAt: Date!
+}

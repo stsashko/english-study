@@ -1,0 +1,112 @@
+version: '3'
+services:
+#  node-client:
+#    build:
+#      context: .
+#      dockerfile: ./docker/development/node-client/Dockerfile
+#    container_name: english_study_node_client
+#    working_dir: /app
+#    volumes:
+#      - ./.env:/app/.env
+#      - /app/node_modules
+#    networks:
+#      - english_study_network
+#    tty: true
+#    ports:
+#      - ${NODE_CLIENT_PORT}:${NODE_CLIENT_PORT}
+#    stdin_open: true
+#    environment:
+#      TZ: ${TZ}
+  node-server:
+    build:
+      context: .
+      dockerfile: ./docker/development/node-server/Dockerfile
+    container_name: english_study_node_server
+#    restart: unless-stopped
+    working_dir: /app
+    volumes:
+#      - ./server/:/app
+      - ./.env:/app/.env
+      - /app/node_modules
+    networks:
+      - english_study_network
+    tty: true
+    ports:
+      - ${NODE_SERVER_PORT}:${NODE_SERVER_PORT}
+    stdin_open: true
+    environment:
+      TZ: ${TZ}
+  node-frontend:
+    build:
+      context: .
+      dockerfile: ./docker/development/node-frontend/Dockerfile
+    container_name: english_study_node_frontend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+#      - ./frontend/:/app
+      - ./.env:/app/.env
+      - ./client/build:/app/build
+      - /app/node_modules
+    networks:
+      - english_study_network
+    tty: true
+    ports:
+      - ${NODE_FRONTEND_PORT}:${NODE_FRONTEND_PORT}
+    stdin_open: true
+    environment:
+      TZ: ${TZ}
+  mysql:
+    image: mysql:8.0.26
+    container_name: english_study_mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - ${DB_MYSQL_PORT}:3306
+    volumes:
+      - ./docker/development/mysql:/var/lib/mysql
+      - ./database-backup/latest.${DB_MYSQL_DATABASE}.sql.gz:/docker-entrypoint-initdb.d/database.sql.gz
+    networks:
+      - english_study_network
+    command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_general_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    environment:
+      TZ: ${TZ}
+      MYSQL_DATABASE: ${DB_MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_MYSQL_PASSWORD}
+      SERVICE_NAME: mysql
+  mysql-cron-backup:
+    image: fradelg/mysql-cron-backup
+    container_name: english_mysql_backup
+    depends_on:
+      - mysql
+    volumes:
+      - ./database-backup:/backup
+    networks:
+      - english_study_network
+    environment:
+      - MYSQL_HOST=english_study_mysql
+      - MYSQL_USER=${DB_MYSQL_USERNAME}
+      - MYSQL_PASS=${DB_MYSQL_PASSWORD}
+      - MAX_BACKUPS=15
+      - INIT_BACKUP=1
+      - TZ=${TZ}
+      - CRON_TIME=0 3 * * *
+      - GZIP_LEVEL=9
+    restart: unless-stopped
+  phpmyadmin:
+    build:
+      context: .
+      dockerfile: docker/development/phpmyadmin/Dockerfile
+    container_name: english_study_phpmyadmin
+    environment:
+      PMA_ARBITRARY: '1'
+      PMA_HOST: mysql
+    ports:
+      - ${PHPMYADMIN_PORT}:80
+    depends_on:
+      - mysql
+    networks:
+      - english_study_network
+    restart: always
+networks:
+  english_study_network:

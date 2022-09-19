@@ -1,0 +1,5 @@
+
+extend type Mutation {
+    profile(email: String! @constraint(format: "email"), password: String, name: String! @constraint(minLength: 3)): User
+    uploadAvatar(image:Upload!): User
+}

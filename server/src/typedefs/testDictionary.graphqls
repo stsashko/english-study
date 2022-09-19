@@ -1,0 +1,9 @@
+
+type TestDictionary {
+    id: ID!
+    testId: Int!
+    dictionaryGroupId: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    dictionaryGroup: DictionaryGroup
+}

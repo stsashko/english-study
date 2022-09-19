@@ -1,0 +1,14 @@
+
+extend type Mutation {
+    signup(email: String! @constraint(format: "email"), password: String! @constraint(minLength: 5), name: String! @constraint(minLength: 3), image:Upload!): AuthPayload
+    login(email: String! @constraint(format: "email"), password: String! @constraint(minLength: 5)): AuthPayload
+}
+
+extend type Query {
+    getUser: User!
+}
+
+type AuthPayload {
+    token: String
+    user: User
+}

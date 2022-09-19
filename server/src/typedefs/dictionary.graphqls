@@ -1,0 +1,54 @@
+
+input dictionaryInput {
+    wordId: Int! @constraint(min: 1)
+    dictionaryGroupId: Int! @constraint(min: 1)
+}
+
+input filterDictionaryInput {
+    wordId: Int @constraint(min: 1)
+    dictionaryGroupId: Int @constraint(min: 1)
+    nameWord: String
+    date:String @constraint(minLength: 1)
+}
+
+input orderDictionaryInput {
+    id: Sort
+    wordId: Sort
+    dictionaryGroupId: Sort
+    createdAt: Sort,
+    updatedAt: Sort
+}
+
+type CountDeleteDictionaries {
+    count: Int
+}
+extend type Mutation{
+    addDictionary(input: dictionaryInput): Dictionary
+    updDictionary(id: Int! @constraint(min: 1), input: dictionaryInput): Dictionary
+    delDictionary(dictionaryGroupId: Int! @constraint(min: 1), ids: [Int]!): CountDeleteDictionaries
+    createDictionary(nameDictionary: String! @constraint(min: 1), wordsId: [Int]!): createDictionaryOutput
+}
+
+extend type Query {
+    dictionaries(filter: filterDictionaryInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderDictionaryInput): Dictionaries!
+    getDictionary(id: Int! @constraint(min: 1)): Dictionary!
+}
+
+type createDictionaryOutput {
+    count: Int!
+}
+
+type Dictionaries {
+    data: [Dictionary!]
+    count: Int!
+}
+
+type Dictionary {
+    id: ID!
+    wordId: Int!
+    dictionaryGroupId: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    word: Word
+    dictionaryGroup: DictionaryGroup
+}

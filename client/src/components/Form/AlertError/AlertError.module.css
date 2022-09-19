@@ -1,0 +1,7 @@
+.item {
+    line-height: 17px;
+    margin-bottom: 5px;
+}
+.item:last-child {
+    margin-bottom: 0;
+}

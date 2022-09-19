@@ -1,0 +1,19 @@
+
+scalar Date
+scalar Upload
+scalar JSON
+scalar JSONObject
+
+type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+}
+
+type Query {
+    info:String!
+}
+
+type Mutation {
+    setInfo(name: String!): String!
+}

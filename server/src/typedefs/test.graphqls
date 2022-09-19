@@ -1,0 +1,57 @@
+
+input testInput {
+    dictionaryGroupId: Int! @constraint(min: 1)
+    rating: Int
+    completed: Int
+}
+
+input filterTestInput {
+    dictionaryGroupId: Int @constraint(min: 1)
+    rating: Int @constraint(min: 0)
+    completed: Int @constraint(min: 0)
+    date:String @constraint(minLength: 1)
+}
+
+input orderTestInput {
+    id: Sort
+    dictionaryGroupId: Sort
+    rating: Sort
+    completed: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation {
+    addTest(input: testInput): Test
+    updTest(id: Int! @constraint(min: 1), input: testInput): Test
+    delTest(id: Int! @constraint(min: 1)): Test
+    createTest(dictionaryGroupIds: [Int!]!): Test
+    deleteFullTest(id: Int! @constraint(min: 1)): Test
+    resetFullTest(id: Int! @constraint(min: 1)): Test
+}
+
+extend type Query {
+    tests(filter: filterTestInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderTestInput): Tests!
+    getTest(id: Int! @constraint(min: 1)): Test!
+}
+
+type Tests {
+    data: [Test!]
+    count: Int!
+}
+
+type Test {
+    id: ID!
+    rating: Int!
+    completed: Int!
+    createdAt: Date!
+    updatedAt: Date!
+    testDictionary: [TestDictionary!]!
+    TestType: [testTypeStatistic]
+    _count: JSONObject
+}
+
+type testTypeStatistic {
+    type: String,
+    completed: Int
+}

@@ -1,0 +1,51 @@
+
+input userInputAdd {
+    name: String! @constraint(minLength: 3)
+    email: String! @constraint(format: "email")
+    password: String! @constraint(minLength: 5)
+}
+
+input userInputUpd {
+    name: String! @constraint(minLength: 3)
+    email: String! @constraint(format: "email")
+    password: String @constraint(minLength: 5)
+}
+
+input filterUserInput {
+    name: String @constraint(minLength: 3)
+    email: String @constraint(minLength: 3)
+}
+
+input orderUserInput {
+    id: Sort
+    name: Sort
+    email: Sort
+    createdAt: Sort
+    updatedAt: Sort
+}
+
+extend type Mutation {
+    addUser(input: userInputAdd): User
+    updUser(id: Int! @constraint(min: 1), input: userInputUpd): User
+    delUser(id: Int! @constraint(min: 1)): User
+}
+
+extend type Query {
+    users(filter: filterUserInput, skip: Int @constraint(min: 0), take: Int @constraint(min: 0), orderBy: orderUserInput): Users!
+    user(id: Int! @constraint(min: 1)): User!
+}
+
+type Users {
+    data: [User!]
+    count: Int!
+}
+
+type User {
+    id: ID!
+    name: String!
+    email: String!
+    image: String!
+    createdAt: Date!
+    updatedAt: Date!
+    byWords: [Word!]!
+}
