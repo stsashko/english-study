@@ -32,7 +32,7 @@ interface DataType {
 }
 
 const DictionariesPage:FC = () => {
-    const TITLE = 'DictionaryPage list';
+    const TITLE = 'Dictionaries';
 
     const query: any = useQueryURL();
 
