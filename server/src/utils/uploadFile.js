@@ -17,7 +17,7 @@ const uploadFile = async (file, filePath) => {
     await stream.pipe(fs.createWriteStream(pathName));
 
     return {
-        url: process.env.APP_DEBUG === 'true' ? `http://localhost:${process.env.NODE_SERVER_PORT}/${filePath}/${newFilename}` : `https://${process.env.HOST_CLIENT}}/${filePath}/${newFilename}`
+        url: process.env.APP_DEBUG === 'true' ? `http://localhost:${process.env.NODE_SERVER_PORT}/${filePath}/${newFilename}` : `https://${process.env.HOST_CLIENT}/${filePath}/${newFilename}`
     }
 }
 
