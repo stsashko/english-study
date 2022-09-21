@@ -20,6 +20,8 @@ Used technologies:
 * MySQL
 * additional packages
 
+*The project was built in docker and deployed to the VPS*
+
 ## ***The result of the work***
 [https://english-study.mydevelop.in.net/](https://english-study.mydevelop.in.net/)
 
