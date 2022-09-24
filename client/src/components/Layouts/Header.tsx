@@ -6,10 +6,12 @@ import {UserOutlined} from "@ant-design/icons";
 import { NavLink, useNavigate } from 'react-router-dom';
 import {PROFILE_ROUTE} from "./../RouterConstants";
 import useSiteData from "../../hooks/useSiteData";
+import useAuthData from "../../hooks/useAuthData";
 import Cookies from "js-cookie";
 
 const Header:FC = () => {
-    const {titlePage, setUser, user} = useSiteData();
+    const {titlePage} = useSiteData();
+    const {setUser, user} = useAuthData();
     const navigate = useNavigate();
 
     const handleLogOut = (e:React.MouseEvent<HTMLElement>):void => {

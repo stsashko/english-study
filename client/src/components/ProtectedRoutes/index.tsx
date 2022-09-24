@@ -4,19 +4,19 @@ import { Navigate } from "react-router-dom";
 import {useQuery} from "@apollo/client";
 import Layout from "./../Layouts/Layout";
 import {GET_USER_QUERY} from "./queries";
-import useSiteData from "./../../hooks/useSiteData";
+import useAuthData from "./../../hooks/useAuthData";
 
 const ProtectedRoutes:FC = () => {
-    const {loading, error, data} = useQuery(GET_USER_QUERY, {
+    const {loading, data} = useQuery(GET_USER_QUERY, {
         variables: {}
     });
 
-    const {setUser, user} = useSiteData();
+    const {setUser, user} = useAuthData();
 
     useEffect(() => {
         if(data?.getUser)
             setUser(data.getUser)
-    }, [data]);
+    }, [data, setUser]);
 
     const location = useLocation();
 

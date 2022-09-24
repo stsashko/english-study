@@ -11,7 +11,8 @@ import "./../auth.css";
 import s from "./LoginPage.module.css";
 import {LOGIN_MUTATION} from "./mutations";
 import isMobile from "is-mobile";
-import useSiteData from "./../../hooks/useSiteData";
+
+import useAuthData from "./../../hooks/useAuthData";
 import AlertError from "./../../components/Form/AlertError";
 
 interface CustomizedState {
@@ -22,7 +23,7 @@ const LoginPage: FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const {setUser} = useSiteData();
+    const {setUser, setAuthToken} = useAuthData();
 
     const [errorServer, setErrorServer] = useState<[string] | []>([]);
 
@@ -30,11 +31,9 @@ const LoginPage: FC = () => {
         control,
         handleSubmit,
         formState: {errors},
-        setError,
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
-
 
     useEffect(() => {
         if (errorServer.length > 0) {
@@ -45,7 +44,7 @@ const LoginPage: FC = () => {
         }
     }, [errorServer]);
 
-    const [login, {data, loading, error}] = useMutation(LOGIN_MUTATION, {});
+    const [login, {loading}] = useMutation(LOGIN_MUTATION, {});
 
     const onFinish = async (data: any) => {
         try {
@@ -61,6 +60,7 @@ const LoginPage: FC = () => {
 
             const state = location.state as CustomizedState;
 
+            setAuthToken(user.data.login.token);
             setUser(user.data.login.user);
 
             if (state?.from)

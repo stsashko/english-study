@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from "react";
 import {Content} from "../../components/Content";
 import {Button, Col, Form, Input, Row, message} from "antd";
-import useSiteData from "../../hooks/useSiteData";
+import useAuthData from "../../hooks/useAuthData";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import validationSchema from "./validation";
@@ -11,7 +11,7 @@ import {UPLOAD_AVATAR_MUTATION, PROFILE_MUTATION} from "./mutations";
 import AlertError from "../../components/Form/AlertError";
 
 const ProfilePage: FC = () => {
-    const {setUser, user} = useSiteData();
+    const {setUser, user} = useAuthData();
     const [errorServer, setErrorServer] = useState<[string] | []>([]);
     const [uploadLoading, setUploadLoading] = useState(false);
     const [imageUrl, setImageUrl] = useState<string>('');
@@ -26,7 +26,7 @@ const ProfilePage: FC = () => {
     });
 
     const [uploadAvatar] = useMutation(UPLOAD_AVATAR_MUTATION, {});
-    const [profile, {data, loading, error}] = useMutation(PROFILE_MUTATION, {});
+    const [profile, {loading}] = useMutation(PROFILE_MUTATION, {});
 
     useEffect(() => {
         if (errorServer.length > 0) {

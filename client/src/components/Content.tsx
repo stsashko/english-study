@@ -13,7 +13,7 @@ export const Content:FC<IContent> = ({children, title = '', titlePage = ''}) => 
 
     useEffect(() => {
         setTitlePage(titlePage);
-    }, [titlePage]);
+    }, [titlePage, setTitlePage]);
 
     return (
         <HelmetProvider>

@@ -5,49 +5,13 @@ import {Routes, Route} from 'react-router-dom';
 import ProtectedRoutes from "./components/ProtectedRoutes/index";
 import {DASHBOARD_ROUTE, PROFILE_ROUTE, WORDS_ROUTE, SENTENCES_ROUTE, DICTIONARIES_ROUTE, DICTIONARY_ROUTE, TESTS_ROUTE, TEST_WORD_ROUTE, TEST_SENTENCE_ROUTE } from "./components/RouterConstants";
 import {DashboardPage, LoginPage, RegisterPage, ProfilePage, WordsPage, SentencesPage, DictionariesPage, DictionaryPage, TestsPage, TestWordPage, TestSentencePage, Page404} from "./pages";
-import {ApolloClient, ApolloLink, ApolloProvider, from, HttpLink, InMemoryCache} from "@apollo/client";
-import {createUploadLink} from 'apollo-upload-client';
-import Cookies from "js-cookie";
-import PATH_API from './helper/pathAPI';
+import Apollo from "./components/Apollo";
 
 const App: FC = () => {
-    const httpLink = new HttpLink({uri: `${PATH_API}/`});
-
-    const authToken = Cookies.get("auth-token");
-
-    const localeMiddleware = new ApolloLink((operation, forward) => {
-        const customHeaders = operation.getContext().hasOwnProperty("headers") ? operation.getContext().headers : {};
-
-        operation.setContext({
-            headers: {
-                ...customHeaders,
-                'Authorization': authToken ? `Bearer ${authToken}` : ''
-            }
-        });
-
-        return forward(operation);
-    });
-
-    const uploadLink = createUploadLink({
-        uri: PATH_API,
-        headers: {
-            "keep-alive": "true",
-            'Authorization': authToken ? `Bearer ${authToken}` : ''
-        },
-    })
-
-    const client = new ApolloClient({
-        // uri: 'http://localhost:5000/',
-        link: from([localeMiddleware, uploadLink, httpLink]),
-        cache: new InMemoryCache(),
-        connectToDevTools: true,
-    });
-
     return (
-        <ApolloProvider client={client}>
+        <Apollo>
             <Routes>
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/login" element={<RegisterPage/>}/>
                 <Route path="/register" element={<RegisterPage />}/>
                 <Route path="/" element={<ProtectedRoutes/>}>
                     <Route index element={<DashboardPage/>}/>
@@ -63,7 +27,7 @@ const App: FC = () => {
                 </Route>
                 {<Route path="*" element={<Page404 />} />}
             </Routes>
-        </ApolloProvider>
+        </Apollo>
     );
 };
 

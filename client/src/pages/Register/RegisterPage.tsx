@@ -10,14 +10,14 @@ import {NavLink, useNavigate} from "react-router-dom";
 import "./../auth.css";
 import {REGISTER_MUTATION} from "./mutations";
 import isMobile from "is-mobile";
-import useSiteData from "./../../hooks/useSiteData";
+import useAuthData from "./../../hooks/useAuthData";
 import AlertError from "./../../components/Form/AlertError";
 
 import UploadInput from "./../../components/Form/UploadInput";
 
 const RegisterPage: FC = () => {
     const navigate = useNavigate();
-    const {setUser} = useSiteData();
+    const {setUser} = useAuthData();
     const [errorServer, setErrorServer] = useState<[string] | []>([]);
     const [loadSubmit, setLoadSubmit] = useState<boolean>(false);
 
