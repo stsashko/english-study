@@ -14,11 +14,9 @@ const AuthProvider:FC<IHeadProviderProps> = (props: IHeadProviderProps) => {
     const contextValue = useMemo<IAuthContext>(
         (): IAuthContext => ({
             user,
-            setUser,
-            authToken,
-            setAuthToken
+            setUser
         }),
-        [JSON.stringify(user), setUser, authToken, setAuthToken]
+        [user, setUser, authToken, setAuthToken]
     );
 
     return (

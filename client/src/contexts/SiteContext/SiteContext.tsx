@@ -5,9 +5,5 @@ export const SiteContext = createContext<ISiteContext>({
     title: '',
     setTitle: () => {},
     titlePage: '',
-    setTitlePage: () => {},
-    user: {},
-    setUser: () => {},
-    authToken: false,
-    setAuthToken: () => {},
+    setTitlePage: () => {}
 });

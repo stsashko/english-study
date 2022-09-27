@@ -1,7 +1,6 @@
 import React, {FC, ReactNode} from 'react';
 import {ApolloClient, ApolloLink, ApolloProvider, from, HttpLink, InMemoryCache} from "@apollo/client";
 import PATH_API from "../../helper/pathAPI";
-import useAuthData from "./../../hooks/useAuthData";
 import Cookies from "js-cookie";
 import {createUploadLink} from "apollo-upload-client";
 
@@ -10,13 +9,9 @@ interface IApollo {
 }
 
 const Apollo:FC<IApollo> = ({children}) => {
-
     const httpLink = new HttpLink({uri: `${PATH_API}/`});
 
-    const {authToken} = useAuthData();
-
-    const token = Cookies.get("auth-token") || authToken;
-
+    const token = Cookies.get("auth-token");
     const localeMiddleware = new ApolloLink((operation, forward) => {
         const customHeaders = operation.getContext().hasOwnProperty("headers") ? operation.getContext().headers : {};
 
@@ -44,7 +39,6 @@ const Apollo:FC<IApollo> = ({children}) => {
         cache: new InMemoryCache(),
         connectToDevTools: true,
     });
-
 
     return (
         <ApolloProvider client={client}>

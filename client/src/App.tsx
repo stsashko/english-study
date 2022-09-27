@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import 'antd/dist/antd.css';
 import './App.css';
 import {Routes, Route} from 'react-router-dom';
-import ProtectedRoutes from "./components/ProtectedRoutes/index";
+import ProtectedRoutes from "./components/ProtectedRoutes";
 import {DASHBOARD_ROUTE, PROFILE_ROUTE, WORDS_ROUTE, SENTENCES_ROUTE, DICTIONARIES_ROUTE, DICTIONARY_ROUTE, TESTS_ROUTE, TEST_WORD_ROUTE, TEST_SENTENCE_ROUTE } from "./components/RouterConstants";
 import {DashboardPage, LoginPage, RegisterPage, ProfilePage, WordsPage, SentencesPage, DictionariesPage, DictionaryPage, TestsPage, TestWordPage, TestSentencePage, Page404} from "./pages";
 import Apollo from "./components/Apollo";

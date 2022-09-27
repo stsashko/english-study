@@ -3,7 +3,5 @@ import { IAuthContext } from "./../../types/IAuthContext";
 
 export const AuthContext = createContext<IAuthContext>({
     user: {},
-    setUser: () => {},
-    authToken: false,
-    setAuthToken: () => {},
+    setUser: () => {}
 });

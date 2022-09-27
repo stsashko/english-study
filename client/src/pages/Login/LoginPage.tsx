@@ -6,7 +6,7 @@ import {useForm, Controller} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import validationSchema from "./validation";
 import Cookies from "js-cookie";
-import {NavLink, useLocation, useNavigate} from "react-router-dom";
+import {NavLink, useLocation} from "react-router-dom";
 import "./../auth.css";
 import s from "./LoginPage.module.css";
 import {LOGIN_MUTATION} from "./mutations";
@@ -21,9 +21,8 @@ interface CustomizedState {
 
 const LoginPage: FC = () => {
     const location = useLocation();
-    const navigate = useNavigate();
 
-    const {setUser, setAuthToken} = useAuthData();
+    const {setUser} = useAuthData();
 
     const [errorServer, setErrorServer] = useState<[string] | []>([]);
 
@@ -58,15 +57,14 @@ const LoginPage: FC = () => {
             let options: any = {expires: data && data.remember !== false ? 365 : null};
             Cookies.set('auth-token', user.data.login.token, options);
 
-            const state = location.state as CustomizedState;
+            const state:any = location.state as CustomizedState;
 
-            setAuthToken(user.data.login.token);
             setUser(user.data.login.user);
 
             if (state?.from)
-                navigate(state.from)
+                window.location.href = state.from.pathname;
             else
-                navigate('/');
+                window.location.href = '/';
 
         } catch (e: any) {
             setErrorServer([e.message])
