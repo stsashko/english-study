@@ -1,6 +1,5 @@
 const {formatISO, startOfMonth, addDays, addMonths, intervalToDuration} = require('date-fns');
 const {StatisticChart} = require("./../entities/Statistic");
-const {Words} = require("../entities/Word");
 
 class StatisticQuery {
     statisticWord = async (parent, args, context) => {
@@ -14,6 +13,8 @@ class StatisticQuery {
                 end: addDays(new Date(toDate), 1)
             });
 
+            const isTooMuch = (intervalDate.years === 1 && intervalDate.months >= 1) || intervalDate.years > 1;
+
             const words = await context.prisma.$queryRawUnsafe(`
                 SELECT ts.createdAt as 'name', SUM(ts.rating = 1) as success,
                        SUM(ts.rating = 0) as fail
@@ -21,7 +22,7 @@ class StatisticQuery {
                 WHERE ts.userId = ${context.userId}
                   AND ts.sentenceId IS NULL
                   AND ts.createdAt >= '${formatISO(new Date(fromDate))}'
-                  AND ts.createdAt < '${formatISO(intervalDate.months > 12 ? addDays(new Date(fromDate), 7) : addDays(new Date(toDate), 1))}'
+                  AND ts.createdAt < '${formatISO(isTooMuch ? addMonths(new Date(fromDate), 1) : addDays(new Date(toDate), 1))}'
                 GROUP BY DATE_FORMAT(ts.createdAt, '%d.%m.%y')
                 ORDER BY ts.createdAt asc LIMIT 31;
             `);
@@ -45,6 +46,8 @@ class StatisticQuery {
                 end: addDays(new Date(toDate), 1)
             });
 
+            const isTooMuch = (intervalDate.years === 1 && intervalDate.months >= 1) || intervalDate.years > 1;
+
             const sentences = await context.prisma.$queryRawUnsafe(`
                 SELECT ts.createdAt as 'name', SUM(ts.rating = 1) as success,
                        SUM(ts.rating = 0) as fail
@@ -52,7 +55,7 @@ class StatisticQuery {
                 WHERE ts.userId = ${context.userId}
                   AND ts.wordId IS NULL
                   AND ts.createdAt >= '${formatISO(new Date(fromDate))}'
-                  AND ts.createdAt < '${formatISO(intervalDate.months > 12 ? addDays(new Date(fromDate), 7) : addDays(new Date(toDate), 1))}'
+                  AND ts.createdAt < '${formatISO(isTooMuch ? addMonths(new Date(fromDate), 1) : addDays(new Date(toDate), 1))}'
                 GROUP BY DATE_FORMAT(ts.createdAt, '%d.%m.%y')
                 ORDER BY ts.createdAt asc LIMIT 31;
             `);

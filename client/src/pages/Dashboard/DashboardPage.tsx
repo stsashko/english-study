@@ -12,13 +12,13 @@ const DashboardPage: FC = () => {
 
     const {loading: loadingWords, data: dataWords, refetch: refetchWords} = useQuery(STATISTIC_WORD_QUERIES, {
         variables: {
-            date: `${moment(new Date(), 'YYYY.MM.DD').subtract(7, 'days').format("YYYY.MM.DD")}-${moment(new Date(), 'YYYY.MM.DD').format("YYYY.MM.DD")}`,
+            date: `${moment(new Date(), 'YYYY.MM.DD').subtract(1, 'months').format("YYYY.MM.DD")}-${moment(new Date(), 'YYYY.MM.DD').format("YYYY.MM.DD")}`,
         }
     });
 
     const {loading: loadingSentences, data: dataSentences, refetch: refetchSentences} = useQuery(STATISTIC_SENTENCE_QUERIES, {
         variables: {
-            date: `${moment(new Date(), 'YYYY.MM.DD').subtract(7, 'days').format("YYYY.MM.DD")}-${moment(new Date(), 'YYYY.MM.DD').format("YYYY.MM.DD")}`,
+            date: `${moment(new Date(), 'YYYY.MM.DD').subtract(1, 'months').format("YYYY.MM.DD")}-${moment(new Date(), 'YYYY.MM.DD').format("YYYY.MM.DD")}`,
         }
     });
 
@@ -39,7 +39,7 @@ const DashboardPage: FC = () => {
                             data={dataWords?.statisticWord || []}
                             refetch={refetchWords}
                             colors={['#e1e90b', '#00a5f4']}
-                            defaultValue={[moment(new Date(), 'DD.MM.YYYY').subtract(7, 'days'), moment(new Date(), 'DD.MM.YYYY')]}
+                            defaultValue={[moment(new Date(), 'DD.MM.YYYY').subtract(1, 'months'), moment(new Date(), 'DD.MM.YYYY')]}
                         />
                     </Col>
                     <Col xs={{span: 24}} sm={{span: 24}} md={{span: 24}} lg={{span: 12}} style={{marginBottom: '16px'}}>
@@ -49,7 +49,7 @@ const DashboardPage: FC = () => {
                             data={dataSentences?.statisticSentence || []}
                             refetch={refetchSentences}
                             colors={['#ffa000', '#00af7a']}
-                            defaultValue={[moment(new Date(), 'DD.MM.YYYY').subtract(7, 'days'), moment(new Date(), 'DD.MM.YYYY')]}
+                            defaultValue={[moment(new Date(), 'DD.MM.YYYY').subtract(1, 'months'), moment(new Date(), 'DD.MM.YYYY')]}
                         />
                     </Col>
                     <Col span={24}>
