@@ -84,7 +84,8 @@ class StatisticQuery {
                        ROUND(SUM(tq.rating = 1) * 100 / COUNT(*)) as rating
                 FROM TestQuestion as tq
                          LEFT JOIN TestType as tt ON tt.id = tq.testTypeId
-                WHERE tq.completed = 1
+                WHERE tq.userId = ${context.userId}
+                  AND tq.completed = 1
                   AND tq.createdAt >= '${formatISO(startOfMonth(new Date(fromDate)))}'
                   AND tq.createdAt < '${formatISO(intervalDate.years > 2 ? addMonths(startOfMonth(new Date(fromDate)), 12) : addMonths(startOfMonth(new Date(toDate)), 1))}'
                 GROUP BY DATE_FORMAT(tq.createdAt, '%m.%y'), testTypeId;
