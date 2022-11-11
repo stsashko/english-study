@@ -51,7 +51,7 @@ model User {
 model Sentence {
   id                    Int                     @id @default(autoincrement())
   text                  String
-  translation           String                  @unique
+  translation           String
   rating                Int                     @default(0)
   numberShow            Int                     @default(0)
   numberSuccesses       Int                     @default(0)
