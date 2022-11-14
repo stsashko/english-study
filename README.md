@@ -25,7 +25,7 @@ Used technologies:
 ## ***The result of the work***
 [https://english-study.mydevelop.in.net/](https://english-study.mydevelop.in.net/)
 
-login: admin@gmail.com
+login: user@gmail.com
 
 password: 111111
 
