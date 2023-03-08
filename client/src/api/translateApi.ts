@@ -1,6 +1,5 @@
 import axios from "axios";
 
-const KEY = '6136e17052msh7ae7b4d4a6df944p1eda45jsn8ffc932ae150';
 const PATH = {
     wordDefinitions: 'word-definitions.p.rapidapi.com',
     translatePlus: 'translate-plus.p.rapidapi.com',
@@ -28,7 +27,7 @@ interface IAITranslateApi {
     translate: string
 }
 
-const dictionaryApiDev = async (word: string): Promise<string[] | undefined> => {
+const dictionaryApiDev = async (rapidApiKey:string, word: string): Promise<string[] | undefined> => {
     try {
         const phonetics: string[] = [];
         const {data} = await axios.get(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
@@ -48,14 +47,14 @@ const dictionaryApiDev = async (word: string): Promise<string[] | undefined> => 
     }
 }
 
-const wordDefinitionsApi = async (word: string): Promise<string[] | undefined> => {
+const wordDefinitionsApi = async (rapidApiKey:string, word: string): Promise<string[] | undefined> => {
     try {
         const phonetics: string[] = [];
 
         let {data} = await axios.get(`https://${PATH.wordDefinitions}/v2/`, {
             params: {action: 'getDefinition', word: word},
             headers: {
-                'X-RapidAPI-Key': KEY,
+                'X-RapidAPI-Key': rapidApiKey,
                 'X-RapidAPI-Host': PATH.wordDefinitions
             }
         });
@@ -85,8 +84,7 @@ const delay = async () => {
     });
 }
 
-
-export const getPhoneticsApi = async (word: string): Promise<string[]> => {
+export const getPhoneticsApi = async (rapidApiKey:string, word: string): Promise<string[]> => {
     try {
         let words = word.replaceAll(/\s+/g, ' ').trim().split(' ');
 
@@ -94,9 +92,9 @@ export const getPhoneticsApi = async (word: string): Promise<string[]> => {
         let resultData:string[] = [];
 
         for (const w of words) {
-            let phonetics = await dictionaryApiDev(w);
+            let phonetics = await dictionaryApiDev(rapidApiKey, w);
             if (typeof phonetics !== 'undefined' && !phonetics.length) {
-                phonetics = await wordDefinitionsApi(w);
+                phonetics = await wordDefinitionsApi(rapidApiKey, w);
             }
 
             if(typeof phonetics !== 'undefined')
@@ -121,7 +119,7 @@ export const getPhoneticsApi = async (word: string): Promise<string[]> => {
 }
 
 
-const translatePlusApi = async (word: string): Promise<ITranslatePlus | undefined> => {
+const translatePlusApi = async (rapidApiKey:string, word: string): Promise<ITranslatePlus | undefined> => {
     const translate:ITranslatePlus = {
         wordNative: '',
         wordTranslate: '',
@@ -136,7 +134,7 @@ const translatePlusApi = async (word: string): Promise<ITranslatePlus | undefine
         }, {
             headers: {
                 'content-type': 'application/json',
-                'X-RapidAPI-Key': KEY,
+                'X-RapidAPI-Key': rapidApiKey,
                 'X-RapidAPI-Host': PATH.translatePlus
             }
         });
@@ -155,12 +153,12 @@ const translatePlusApi = async (word: string): Promise<ITranslatePlus | undefine
     }
 }
 
-const twinWordWordGraphDictionary = async (word: string):Promise<string[] | []> => {
+const twinWordWordGraphDictionary = async (rapidApiKey:string, word: string):Promise<string[] | []> => {
     try {
         const {data} =  await axios.get(`https://${PATH.twinWordWordGraphDictionary}/example/`, {
             params: {entry: word},
             headers: {
-                'X-RapidAPI-Key': KEY,
+                'X-RapidAPI-Key': rapidApiKey,
                 'X-RapidAPI-Host': PATH.twinWordWordGraphDictionary
             }
         })
@@ -172,7 +170,7 @@ const twinWordWordGraphDictionary = async (word: string):Promise<string[] | []> 
     return [];
 }
 
-const AITranslateApi = async (examples: string[]):Promise<IAITranslateApi[] | []> => {
+const AITranslateApi = async (rapidApiKey:string, examples: string[]):Promise<IAITranslateApi[] | []> => {
     const translate:IAITranslateApi[] = [];
 
     if(!examples.length)
@@ -186,7 +184,7 @@ const AITranslateApi = async (examples: string[]):Promise<IAITranslateApi[] | []
         }, {
             headers: {
                 'content-type': 'application/json',
-                'X-RapidAPI-Key': KEY,
+                'X-RapidAPI-Key': rapidApiKey,
                 'X-RapidAPI-Host': PATH.AITranslate
             }
         });
@@ -198,19 +196,27 @@ const AITranslateApi = async (examples: string[]):Promise<IAITranslateApi[] | []
 
         if(examplesTranslate.length === examples.length) {
             examples.forEach((item: string, index: number) => {
+                let native = item.charAt(0).toUpperCase() + item.slice(1) + (/.+(\.|\?)$/.test(item) !== true ? '.' : '');
                 translate.push({
-                    native: item.charAt(0).toUpperCase() + item.slice(1),
-                    translate: examplesTranslate[index].charAt(0).toUpperCase() + examplesTranslate[index].slice(1)
+                    native,
+                    translate: examplesTranslate[index].charAt(0).toUpperCase() + examplesTranslate[index].slice(1).replace(/(\?|\.)$/, '') + native.slice(-1)
                 });
             });
         }
     } catch (e) {
     }
 
+
+
     return translate;
+
+    // return translate.map(item => ({
+    //     native: '',
+    //     translate: ''
+    // }));
 }
 
-export const getTranslate = async (word: string): Promise<ITranslate | undefined> => {
+export const getTranslate = async (rapidApiKey:string, word: string): Promise<ITranslate | undefined> => {
     const translateData:ITranslate = {
         wordNative: '',
         wordTranslate: '',
@@ -218,21 +224,21 @@ export const getTranslate = async (word: string): Promise<ITranslate | undefined
     }
 
     try {
-        const translate:ITranslatePlus | undefined = await translatePlusApi(word);
+        const translate:ITranslatePlus | undefined = await translatePlusApi(rapidApiKey, word);
 
         if(typeof translate !== 'undefined')
         {
             translateData.wordNative = translate.wordNative;
             translateData.wordTranslate = translate.wordTranslate;
 
-            const examples: string[] = await twinWordWordGraphDictionary(word);
+            const examples: string[] = await twinWordWordGraphDictionary(rapidApiKey, word);
             if(translate.examples.length > 0 && examples.length)
                 translate.examples = [
                     ...translate.examples,
                     ...examples
                 ].map((i: any) => i.replaceAll(/\<\/?b\>/ig, ''));
 
-            let examplesRes = await AITranslateApi(translate.examples.filter((value, index, self) => self.indexOf(value) === index));
+            let examplesRes = await AITranslateApi(rapidApiKey, translate.examples.filter((value, index, self) => self.indexOf(value) === index));
             if(examplesRes.length)
                 translateData.examples = examplesRes;
 

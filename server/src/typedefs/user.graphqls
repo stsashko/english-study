@@ -48,4 +48,5 @@ type User {
     createdAt: Date!
     updatedAt: Date!
     byWords: [Word!]!
+    rapidApiKey: String
 }

@@ -6,12 +6,16 @@ import {schemaWords} from "./validation";
 import {IWordSentence, IWordMultiple} from "../../types/IWordSentence";
 import {getPhoneticsApi, getTranslate} from "../../api/translateApi";
 
+import useAuthData from "../../hooks/useAuthData";
+
 type Type = {
     setOpenCreationManager: (input:boolean) => void
     handleSubmitCreationManager: (input:IWordMultiple[]) => void
 }
 
 const CreationManager: FC<Type> = ({setOpenCreationManager, handleSubmitCreationManager}) => {
+
+    const {user} = useAuthData();
 
     const [progressPercent, setProgressPercent] = useState<number>(0);
     const [showProgress, setShowProgress] = useState<boolean>(false);
@@ -69,7 +73,7 @@ const CreationManager: FC<Type> = ({setOpenCreationManager, handleSubmitCreation
                 sentenceTranslationList: []
             };
 
-            let translate = await getTranslate(word);
+            let translate = await getTranslate(user.rapidApiKey, word);
 
             if (typeof translate !== 'undefined') {
                 wordsSentence.name = translate.wordNative;
@@ -80,7 +84,7 @@ const CreationManager: FC<Type> = ({setOpenCreationManager, handleSubmitCreation
                 wordsSentence.sentenceTranslation = wordsSentence.sentenceTranslationList[0];
             }
 
-            let phonetics = await getPhoneticsApi(word);
+            let phonetics = await getPhoneticsApi(user.rapidApiKey, word);
             if (Array.isArray(phonetics) && phonetics.length) {
                 wordsSentence.transcriptionList = phonetics;
                 wordsSentence.transcription = phonetics[0];
