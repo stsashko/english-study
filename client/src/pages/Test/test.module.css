@@ -32,3 +32,8 @@
 .radio.radioValidating span span:after {
     background-color: #52c41a !important;
 }
+.sentence {
+    white-space: normal !important;
+    line-height: 23px !important;
+    margin-bottom: 10px !important;
+}
