@@ -129,7 +129,7 @@ const TestsPage:FC = () => {
     const handleTableChange = async (
         pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
-        sorter: SorterResult<DataType> | SorterResult<DataType[]>,
+        sorter: any,
     ) => {
         await fetchData({
             sortField: sorter.field as string,

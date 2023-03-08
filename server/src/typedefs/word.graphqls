@@ -38,6 +38,7 @@ extend type Mutation {
     addWord(input: wordInput): Word
     updWord(id: Int! @constraint(min: 1), input: wordInput): Word
     delWord(id: Int! @constraint(min: 1)): Word
+    addWordMultiple(input: [wordInput]): [Word]
 }
 
 extend type Query {

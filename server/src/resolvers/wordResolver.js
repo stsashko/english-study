@@ -87,6 +87,41 @@ class WordMutation {
             return e;
         }
     }
+
+    addWordMultiple = async (parent, args, context, info) => {
+        context.isAuth();
+
+        try {
+            const words = [];
+
+            for (const item of args.input) {
+                let word = await context.prisma.word.create({
+                    data: {
+                        name: item.name,
+                        translation: item.translation,
+                        transcription: item.transcription,
+                        userId: context.userId
+                    },
+                });
+
+                await context.prisma.sentence.create({
+                    data: {
+                        text: item.sentenceText,
+                        translation: item.sentenceTranslation,
+                        wordId: word.id
+                    },
+                });
+
+                words.push(new Word(word));
+            }
+
+            return words;
+        } catch (e) {
+            return e;
+        }
+
+    }
+
     updWord = async (parent, args, context, info) => {
         context.isAuth();
         try {

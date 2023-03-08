@@ -4,10 +4,10 @@ import Breadcrumb from "./../../components/Breadcrumb";
 import {Table, message, Button, Row, Col, Popconfirm, Divider, notification, Rate} from 'antd';
 import type {ColumnsType, TablePaginationConfig} from 'antd/es/table';
 import type {FilterValue, SorterResult} from 'antd/es/table/interface';
-import {PlusOutlined, DeleteOutlined, CheckCircleOutlined} from "@ant-design/icons";
+import {PlusOutlined, DeleteOutlined, CheckCircleOutlined, GroupOutlined} from "@ant-design/icons";
 import {useQuery, useLazyQuery, useMutation} from "@apollo/client";
 import {WORDS_QUERIES, WORD_QUERIES} from "./queries";
-import {ADD_WORD_MUTATION, UPD_WORD_MUTATION, DEL_WORD_MUTATION, CREATE_DICTIONARY_MUTATION} from "./mutations";
+import {ADD_WORD_MUTATION, UPD_WORD_MUTATION, DEL_WORD_MUTATION, CREATE_DICTIONARY_MUTATION, ADD_WORD_MULTIPLE_MUTATION} from "./mutations";
 import FilterForm from "./../../components/Form/FilterForm";
 import {TextInput, DateRange} from "./../../components/Form/FilterForm/components";
 import {useQueryURL} from "./../../hooks/useQueryURL/useQueryURL";
@@ -17,6 +17,9 @@ import validationSchema, {validationSchemaDictionary} from "./validation";
 import useModalForm from "./../../hooks/useModalForm";
 import {getFilterData} from './../../helper/filter';
 import Cookies from "js-cookie";
+import CreationManager from "./../../components/CreationManager";
+import {IWordMultiple} from "../../types/IWordSentence";
+import useAuthData from "../../hooks/useAuthData";
 
 interface DataType {
     key: React.Key
@@ -50,6 +53,9 @@ const WordsPage: FC = () => {
     } = useModalForm(validationSchemaDictionary);
 
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [openCreationManager, setOpenCreationManager] = useState<boolean>(false);
+
+    const {user} = useAuthData();
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
         setSelectedRowKeys(newSelectedRowKeys);
@@ -86,6 +92,7 @@ const WordsPage: FC = () => {
     });
 
     const [addWord] = useMutation(ADD_WORD_MUTATION, {});
+    const [addWordMultiple] = useMutation(ADD_WORD_MULTIPLE_MUTATION, {});
     const [updWord] = useMutation(UPD_WORD_MUTATION, {});
     const [delWord] = useMutation(DEL_WORD_MUTATION, {});
     const [createDictionary] = useMutation(CREATE_DICTIONARY_MUTATION, {});
@@ -180,7 +187,7 @@ const WordsPage: FC = () => {
     const handleTableChange = async (
         pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
-        sorter: SorterResult<DataType> | SorterResult<DataType[]>
+        sorter: any
     ) => {
         await fetchData({
             sortField: sorter.field as string,
@@ -314,6 +321,16 @@ const WordsPage: FC = () => {
         }
     };
 
+    const handleSubmitCreationManager = async (input: IWordMultiple[]) => {
+        await addWordMultiple({
+            variables: {
+                input: input,
+            }
+        });
+        await refetch();
+        setOpenCreationManager(false);
+    }
+
     return (
         <Content title={TITLE} titlePage={TITLE}>
             <Row style={{marginBottom: '20px'}}>
@@ -324,7 +341,8 @@ const WordsPage: FC = () => {
                 </Col>
                 <Col span={4} xs={{span: 24}} sm={{span: 12}} md={{span: 12}} lg={{span: 12}}
                      style={{textAlign: "right"}}>
-                    <Button type="primary" size="small" icon={<PlusOutlined/>} onClick={() => {
+                    {user.id === '1' && <Button type="primary" ghost size="small" onClick={() => setOpenCreationManager(true)}>Creation manager</Button>}
+                    <Button type="primary" size="small" style={{marginLeft: "15px"}} icon={<PlusOutlined/>} onClick={() => {
                         reset({
                             id: '', name: '', transcription: '', translation: '', sentenceId: '', sentenceText: '', sentenceTranslation: ''
                         });
@@ -396,6 +414,7 @@ const WordsPage: FC = () => {
                        handleSubmitModalForm={handleSubmit2(handleCreateModalFormDictionary)}>
                 <InputModalForm name="nameDictionary" placeholder="Name" control={control2} errors={errors2}/>
             </ModalForm>
+            {openCreationManager && user.id === '1' && <CreationManager setOpenCreationManager={setOpenCreationManager} handleSubmitCreationManager={handleSubmitCreationManager} />}
         </Content>
     );
 }

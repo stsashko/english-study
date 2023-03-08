@@ -71,13 +71,15 @@ const LoginPage: FC = () => {
         }
     };
 
-    const alertErrors = [];
+    const alertErrors:any = [];
     if (isMobile() && Object.keys(errors).length > 0) {
         for (let prop in errors) {
-            alertErrors.push(errors[prop]['message']);
+            alertErrors.push(errors?.[prop]?.['message']);
         }
     }
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Row justify="center" align="middle" className="auth-box">
             <Col span={6} xs={{span: 24}} sm={{span: 12}} md={{span: 8}} lg={{span: 6}}>
@@ -94,7 +96,7 @@ const LoginPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.email?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.email?.message ? errors?.email?.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.email?.message)}>
                                 <div>
                                     <Form.Item
@@ -114,7 +116,7 @@ const LoginPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.password?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.password?.message ? errors?.password?.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.password?.message)}>
                                 <div>
                                     <Form.Item

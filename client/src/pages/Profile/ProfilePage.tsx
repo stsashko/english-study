@@ -92,10 +92,10 @@ const ProfilePage: FC = () => {
         }
     };
 
-    const alertErrors = [];
+    const alertErrors:any = [];
     if (Object.keys(errors).length > 0) {
         for (let prop in errors) {
-            alertErrors.push(errors[prop]['message']);
+            alertErrors.push(errors?.[prop]?.['message']);
         }
     }
 

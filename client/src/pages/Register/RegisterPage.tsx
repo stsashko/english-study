@@ -71,10 +71,10 @@ const RegisterPage: FC = () => {
         })
     };
 
-    const alertErrors = [];
+    const alertErrors:any = [];
     if (isMobile() && Object.keys(errors).length > 0) {
         for (let prop in errors) {
-            alertErrors.push(errors[prop]['message']);
+            alertErrors.push(errors?.[prop]?.['message']);
         }
     }
 
@@ -95,7 +95,7 @@ const RegisterPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.name?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.name?.message ? errors.name.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.name?.message)}>
                                 <div>
                                     <Form.Item
@@ -115,7 +115,7 @@ const RegisterPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.email?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.email?.message ? errors.email.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.email?.message)}>
                                 <div>
                                     <Form.Item
@@ -135,7 +135,7 @@ const RegisterPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.password?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.password?.message ? errors.password.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.password?.message)}>
                                 <div>
                                     <Form.Item
@@ -158,7 +158,7 @@ const RegisterPage: FC = () => {
                         control={control}
                         defaultValue=""
                         render={({field}) => (
-                            <Tooltip placement="rightTop" title={errors?.image?.message} color="#ff4d4f"
+                            <Tooltip placement="rightTop" title={errors?.image?.message ? errors.image.message.toString() : ''} color="#ff4d4f"
                                      visible={!isMobile() && Boolean(errors?.image?.message)}>
                                 <div>
                                     <Form.Item>

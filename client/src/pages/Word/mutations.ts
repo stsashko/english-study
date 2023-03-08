@@ -48,3 +48,17 @@ export const CREATE_DICTIONARY_MUTATION = gql`
         }
     }
 `
+
+export const ADD_WORD_MULTIPLE_MUTATION = gql`
+    mutation AddMultiple($input: [wordInput]){
+        addWordMultiple(input: $input) {
+            id
+            name
+            translation
+            transcription
+            rating
+            createdAt
+            updatedAt
+        }
+    }
+`;
