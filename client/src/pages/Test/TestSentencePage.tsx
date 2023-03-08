@@ -188,7 +188,7 @@ const TestSentencePage: FC = () => {
                 {currentQuestions && (
                     <Card title={(
                         <React.Fragment>
-                            <div style={successfulAnswer !== null ? {color: successfulAnswer ? '#52c41a' : 'red'} : {}}>{currentQuestions.sentence}</div>
+                            <div className={s.sentence} style={successfulAnswer !== null ? {color: successfulAnswer ? '#52c41a' : 'red'} : {}}>{currentQuestions.sentence}</div>
                             {!showTranslation && (
                                 <Button
                                     type="default"
