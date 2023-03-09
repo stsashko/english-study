@@ -12,10 +12,7 @@ class AuthQuery {
             if (!user) {
                 throw new Error('No such user found')
             }
-            return {
-                ...new User(user),
-                rapidApiKey: context.userId === 1 ? '8ebec75931msh1e6d9d1ae584f89p142515jsn637d81a33dac' : ''
-            };
+            return new User(user);
         } catch (e) {
             return e
         }

@@ -46,6 +46,7 @@ model User {
   Test            Test[]
   TestQuestion    TestQuestion[]
   TestStatistic   TestStatistic[]
+  rapidApiKey     String            @default("")
 }
 
 model Sentence {

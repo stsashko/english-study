@@ -8,6 +8,7 @@ class User {
         this.image = user.image;
         this.createdAt = format(new Date(user.createdAt), 'dd.MM.yyyy');
         this.updatedAt = format(new Date(user.updatedAt), 'dd.MM.yyyy');
+        this.rapidApiKey = user.rapidApiKey;
     }
 }
 
