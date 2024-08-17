@@ -1,39 +1,48 @@
 .title {
-    text-align: center;
-    margin-bottom: 40px !important;
+  text-align: center;
+  margin-bottom: 40px !important;
 }
 .radio {
   font-size: 21px !important;
 }
 .radio span {
-    vertical-align: middle;
+  vertical-align: middle;
 }
-.radio .ant-radio{
-    border: solid 1px red !important;
+.radio .ant-radio {
+  border: solid 1px red !important;
 }
 .radio span:first-child {
-    top: 1px !important;
+  top: 1px !important;
 }
 .radioGroup {
-    width: 100% !important;
-    max-width: 700px !important;
-    display: block !important;
-    margin: 0 auto 35px auto !important;
+  width: 100% !important;
+  max-width: 700px !important;
+  display: block !important;
+  margin: 0 auto 35px auto !important;
 }
 .radio.radioError span span {
-    border-color: red !important;
+  border-color: red !important;
 }
 .radio.radioError span span:after {
-    background-color: red !important;
+  background-color: red !important;
 }
 .radio.radioValidating span span {
-    border-color: #52c41a !important;
+  border-color: #52c41a !important;
 }
 .radio.radioValidating span span:after {
-    background-color: #52c41a !important;
+  background-color: #52c41a !important;
 }
 .sentence {
-    white-space: normal !important;
-    line-height: 23px !important;
-    margin-bottom: 10px !important;
+  white-space: normal !important;
+  line-height: 23px !important;
+  margin-bottom: 10px !important;
+}
+.answer {
+  white-space: normal !important;
+  color: #1890ff !important;
+  line-height: 23px !important;
+}
+.questionWord {
+  display: block !important;
+  white-space: normal !important;
 }

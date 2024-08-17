@@ -2,15 +2,16 @@ FROM node:16.14.0-alpine
 
 WORKDIR /app
 
-COPY ["server/package.json", "server/package-lock.json", "./"]
-
-RUN npm install
+COPY ["server/package.json", "./"]
 
 COPY ./server/ .
+COPY ["server/prisma", "./prisma/"]
 
-RUN cd src && npx prisma generate
+RUN npx prisma generate
+
+RUN npm install
+RUN npm i npm-run-all -g
 
 EXPOSE 5000
 
 CMD ["npm", "run", "build"]
-#CMD ["npm", "run", "dev"]

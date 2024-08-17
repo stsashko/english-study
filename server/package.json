@@ -4,10 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node src/app.js",
-    "dev": "set NODE_ENV=dev && nodemon src/app.js",
-    "migrate:up": "npx sequelize-cli db:migrate",
-    "migrate:undo": "npx sequelize-cli db:migrate:undo"
+    "dev": "npm run prisma:generate && npm run prisma:migrate && npm run prisma:seed && npm run node:start",
+    "build": "npm run node:start",
+    "start2": "run-p prisma:* && npm run node:start",
+    "node:start": "node src/app.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate deploy",
+    "prisma:seed": "node prisma/seed.js"
   },
   "type": "commonjs",
   "keywords": [],

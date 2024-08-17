@@ -1,14 +1,12 @@
-version: '3'
+version: "3"
 services:
   node-server:
     build:
       context: .
       dockerfile: ./docker/development/node-server/Dockerfile
-    container_name: english_study_node_server
-#    restart: unless-stopped
+    container_name: english-study-node-server
     working_dir: /app
     volumes:
-#      - ./server/:/app
       - ./server/public/:/app/public/
       - ./.env:/app/.env
       - /app/node_modules
@@ -18,19 +16,24 @@ services:
     ports:
       - ${NODE_SERVER_PORT}:${NODE_SERVER_PORT}
     stdin_open: true
+    restart: unless-stopped
     environment:
       TZ: ${TZ}
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_SERVER_PORT: ${NODE_SERVER_PORT}
+      HOST_SERVER: ${HOST_SERVER}
+      TOKEN_KEY: ${TOKEN_KEY}
+      APP_DEBUG: ${APP_DEBUG}
   node-frontend:
     build:
       context: .
       dockerfile: ./docker/development/node-frontend/Dockerfile
-    container_name: english_study_node_frontend
+    container_name: english-study-node-frontend
     restart: unless-stopped
     working_dir: /app
     volumes:
-#      - ./frontend/:/app
+      - ./client/:/app
       - ./.env:/app/.env
-      - ./client/build:/app/build
       - /app/node_modules
     networks:
       - english_study_network
@@ -40,15 +43,18 @@ services:
     stdin_open: true
     environment:
       TZ: ${TZ}
+      REACT_APP_DEBUG: ${APP_DEBUG}
+      REACT_APP_HOST_SERVER: ${HOST_SERVER}
+      REACT_APP_NODE_SERVER_PORT: ${NODE_SERVER_PORT}
   mysql:
     image: mysql:8.0.26
-    container_name: english_study_mysql
+    container_name: english-study-mysql
     restart: unless-stopped
     tty: true
     ports:
       - ${DB_MYSQL_PORT}:3306
     volumes:
-      - ./docker/development/mysql:/var/lib/mysql
+      - ./database:/var/lib/mysql
       - ./database-backup/latest.${DB_MYSQL_DATABASE}.sql.gz:/docker-entrypoint-initdb.d/database.sql.gz
     networks:
       - english_study_network
@@ -60,7 +66,7 @@ services:
       SERVICE_NAME: mysql
   mysql-cron-backup:
     image: fradelg/mysql-cron-backup
-    container_name: english_mysql_backup
+    container_name: english-study-mysql-backup
     depends_on:
       - mysql
     volumes:
@@ -81,9 +87,9 @@ services:
     build:
       context: .
       dockerfile: docker/development/phpmyadmin/Dockerfile
-    container_name: english_study_phpmyadmin
+    container_name: english-study-phpmyadmin
     environment:
-      PMA_ARBITRARY: '1'
+      PMA_ARBITRARY: "1"
       PMA_HOST: mysql
     ports:
       - ${PHPMYADMIN_PORT}:80

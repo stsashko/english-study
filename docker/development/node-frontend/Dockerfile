@@ -2,12 +2,13 @@ FROM node:16.14.0-alpine
 
 WORKDIR /app
 
-COPY ["server/package.json", "server/package-lock.json", "./"]
+COPY ["client/package.json", "./"]
 
+RUN npm install -g create-react-app
 RUN npm install
 
-COPY ./frontend/ .
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
 
 EXPOSE 7000
 
-CMD ["npm", "run", "build"]
+CMD ["npm", "run", "dev"]

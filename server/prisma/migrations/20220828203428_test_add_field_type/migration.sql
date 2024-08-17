@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `Test` ADD COLUMN `type` INTEGER NOT NULL DEFAULT 0;
